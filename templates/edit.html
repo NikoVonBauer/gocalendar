@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать запись</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Редактировать запись</h1>
+    </header>
+
+    <main>
+        <form method="POST" action="/edit">
+            <label for="date">Дата:</label>
+            <input type="date" id="date" name="date" value="{{.Date}}" required>
+
+            <label for="content">Содержание:</label>
+            <textarea id="content" name="content" rows="4" required>{{.Content}}</textarea>
+
+            <input type="hidden" name="originalDate" value="{{.Date}}">
+            <input type="hidden" name="originalContent" value="{{.Content}}">
+
+            <button type="submit">Сохранить</button>
+            <a href="/" style="margin-left: 1rem; color: #007bff; text-decoration: none;">Отмена</a>
+        </form>
+    </main>
+</body>
+</html>

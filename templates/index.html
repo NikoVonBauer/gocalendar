@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Мой дневник</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Мой дневник</h1>
+    </header>
+
+    <main>
+        <form method="POST" action="/add">
+            <label for="date">Дата:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="content">Содержание:</label>
+            <textarea id="content" name="content" rows="4" required></textarea>
+
+            <button type="submit">Добавить запись</button>
+        </form>
+
+        {{range .}}
+        <div class="entry">
+            <strong>{{.Date}}</strong>
+            <p>{{.Content}}</p>
+
+            <form method="POST" action="/delete" style="display:inline;">
+                <input type="hidden" name="date" value="{{.Date}}">
+                <input type="hidden" name="content" value="{{.Content}}">
+                <button type="submit">Удалить</button>
+            </form>
+
+            <form method="GET" action="/edit" style="display:inline;">
+                <input type="hidden" name="date" value="{{.Date}}">
+                <input type="hidden" name="content" value="{{.Content}}">
+                <button type="submit">Редактировать</button>
+            </form>
+        </div>
+        {{else}}
+        <p>Записей пока нет.</p>
+        {{end}}
+    </main>
+    <div id="toast" class="toast" style="display: none;"></div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const toast = document.getElementById("toast");
+
+    const messages = {
+        added: "Запись добавлена",
+        deleted: "Запись удалена",
+        edited: "Запись обновлена"
+    };
+
+    const type = urlParams.get("success");
+    if (type && messages[type]) {
+        toast.textContent = messages[type];
+        toast.style.display = "block";
+        setTimeout(() => {
+            toast.style.display = "none";
+        }, 3000);
+        // Удаляем параметр из URL (чтобы не всплывало при обновлении)
+        history.replaceState(null, "", window.location.pathname);
+    }
+</script>
+</body>
+</html>
